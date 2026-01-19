@@ -52,16 +52,14 @@ Dm = [0;0];
 
 %% Computing P-Matrix using User-Defined Q-Matrix
 
-prompt3 = 'Define the Q-matrix: ';
-Q = input(prompt3)                         % Defining Q-matrix based on user-defined input
-
+% Defining Positive-Definite, Symmetric, Real Q-matrix
+Q = eye(2);                      
 
 % Symbolic Representation & Computation of P-matrix
 syms p11 p12 p22 real
 P = [p11 p12; p12 p22];
 P_MatEqn = Q + Am'*P + P*Am;
 [p11_symb, p12_symb, p22_symb] = solve(P_MatEqn == 0, [p11,p12,p22]);
-
 
 % Computed P-Matrix converted to its Numeric Values
 P = double([p11_symb p12_symb; p12_symb p22_symb]) 
@@ -79,7 +77,7 @@ u_func = solve(LyapunovFunc == 0, u)    % Analytical Expression for Control Effo
 %% SIMULINK Model Execution & Retrieving SIMULINK Output Data
 
 % SIMULINK Execution
-sim('student_model_reference');
+sim('Control_System_Framework');
 
 
 % System Response Extraction
@@ -102,7 +100,7 @@ xt = [times, trolleyPos];
 
 
 % Animation Execution
-sim('student_model_animation');
+sim('Payload_Motion_Animation');
 
 %% Graphical Visualization of System Response & Controller Performance
 
@@ -112,19 +110,15 @@ oscillations = x(:, 2) * 1000;         % Payload Oscillation in mm/s
 
 fig1 = figure();
 plot(times, deflections, "LineWidth", 1.75, "Color",[0.96,0.32,0.05],...
-     "Marker",".","MarkerSize", 14, 'MarkerIndices', 1:2:length(x2_real))
-hold on 
-plot(times, oscillations, "LineWidth", 1.75, "Color","#6E026F",...
-     "Marker",".","MarkerSize", 12, 'MarkerIndices', 1:2:length(x2_real))
+     "Marker",".","MarkerSize", 14, 'MarkerIndices', 1:2:length(deflections))
 
 xlabel("Time (sec)", "FontWeight","bold", "FontSize", 12)
 ylabel("Plant States (mm)", "FontWeight","bold", "FontSize", 12)
 title("Plant Response in Tracking Reference Model A",...
       "FontWeight","bold", "FontSize", 12);
-legend("Payload Deflections (mm)", "Payload Oscillations (mm/s)")
+legend("Payload Deflections (mm)")
 grid on
 grid minor
-hold off
 
 
 % Visualizing Tracking Error Convergence
@@ -134,17 +128,14 @@ oscl_errs = (errs(:, 2))*1000;        % Oscillation Tracking Error in mm/s
 fig2 = figure();
 plot(times, defl_errs, "LineWidth", 1.85, "Color",[0.16,0.62,0.56],...
      "Marker",".","MarkerSize", 14, 'MarkerIndices', 1:2:length(defl_errs))
-hold on
-plot(times, oscl_errs, "LineWidth", 1.85, "Color","#F16D34",...
-     "Marker",".","MarkerSize", 14, 'MarkerIndices', 1:2:length(defl_errs))
 
 xlabel("Time (sec)", "FontWeight","bold", "FontSize", 12)
 ylabel("Tracking Error", "FontWeight","bold", "FontSize", 12)
 title("Tracking Error of Controller-1 in Following Reference Model A",...
       "FontWeight","bold", "FontSize", 12);
-legend("Deflection Error (mm)", "Oscillation Error (mm/s)")
+legend("Deflection Error (mm)")
 grid on
 grid minor
-hold off
+
 
 
