@@ -80,7 +80,7 @@ u_func = solve(LyapunovFunc == 0, u)  % Analytical Expression for Control Effort
 %% SIMULINK Model Execution & Retrieving SIMULINK Output Data
 
 % SIMULINK Execution
-sim('student_model_reference');
+sim('Control_System_Framework');
 
 % System Response Extraction
 xd = simout_xd.Data;          % Model Plant States
@@ -101,7 +101,7 @@ end
 xt = [times, trolleyPos];
 
 % Animation Execution
-sim('student_model_animation');
+sim('Payload_Motion_Animation');
 
 %% Visualization of System Response in Simulated Environment & Experimental Setup
 
